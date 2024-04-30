@@ -1,0 +1,8 @@
+from encrypt import AES256
+from save import Saver
+import os
+
+
+
+e = AES256("Secret")
+print(e.encrypt("textToMatch"))
