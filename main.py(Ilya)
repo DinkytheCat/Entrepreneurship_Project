@@ -1,7 +1,17 @@
 import random
 import string
+works = "4"
+while works == ("4"):
+    length = int(input("Enter lenght of password:"))
+    round(length)
+    if length.isnumeric() = false
+    if (length) < 7:
+        print ("Error")
+    if (length) > 20:
+        print ("Error")
+    else:
+        works = "6"
 
-length = int(input("Enter lenght of password:"))
 
 print(string.ascii_letters)
 print(string.digits)
