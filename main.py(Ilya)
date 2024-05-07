@@ -2,9 +2,11 @@ import random
 import string
 works = "4"
 while works == ("4"):
-    length = int(input("Enter lenght of password:"))
+    length = int(input("Enter length of password:"))
     round(length)
-    if length.isnumeric() = false
+    numericornot = length.isnumeric()
+    if numericornot == "True":
+        works == "6"
     if (length) < 7:
         print ("Error")
     if (length) > 20:
@@ -26,4 +28,4 @@ for i in range(length):
     next_character = random.choice(chars)
     password += next_character
 
-print("password:", password)
+print("password: ", password)
