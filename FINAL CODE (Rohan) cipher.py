@@ -1,13 +1,16 @@
 import json
 import os
 
-class Saver:
-    def _init_(self, file):
-        save.file = file
+class PasswordManager:            
 
     def save(self, data):
         with open(self.file, "w") as file:
             json.dump(data, file, indent=4)
+
+    def __init__(self, file):
+        self.file = file
+        #test if this works using print statement
+        print('object is initialized')
 
     def read(self):
         with open(self.file, "r") as file:
