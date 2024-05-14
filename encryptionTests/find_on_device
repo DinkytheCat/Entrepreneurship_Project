@@ -1,0 +1,60 @@
+import os
+from cryptography.hazmat.primitives import padding
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+from cryptography.hazmat.backends import default_backend
+
+def read_password_from_hidden_folder(folder_path, filename, key):
+    try:
+        with open(os.path.join(folder_path, filename), "rb") as file:
+            encrypted_data = file.read()
+
+        #take the same IV from the encrypted password
+        iv = encrypted_data[:16]
+
+        cipher = Cipher(algorithms.AES(key), modes.CBC(iv), backend=default_backend())
+        decryptor = cipher.decryptor()
+
+        decrypted_data = decryptor.update(encrypted_data[16:]) + decryptor.finalize()
+
+        #unpad the decrypted data
+        unpadder = padding.PKCS7(128).unpadder()
+        unpadded_password = unpadder.update(decrypted_data) + unpadder.finalize()
+
+        return unpadded_password.decode()
+    except Exception as e:
+        print("Decryption error:", e)
+        return None
+
+def find_hidden_folder(folder_name):
+    try:
+        #get users directory
+        user_home = os.path.expanduser("~")
+        folder_relative_path = folder_name
+        folder_path = os.path.join(user_home, folder_relative_path)
+        
+        if os.path.exists(folder_path):
+            print("Hidden folder found:", folder_path)
+            return folder_path
+        else:
+            print("Hidden folder not found.")
+            return None
+    except Exception as e:
+        print("Error finding hidden folder:", e)
+        return None
+
+if __name__ == "__main__":
+    folder_name = "Youwillneverfindthis"
+    filename = "password.txt"
+    key = os.urandom(32)
+
+    found_folder_path = find_hidden_folder(folder_name)
+
+    #reads the password
+    if found_folder_path:
+        decrypted_password = read_password_from_hidden_folder(found_folder_path, filename, key)
+        if decrypted_password:
+            print("Decrypted password:", decrypted_password)
+        else:
+            print("Failed to decrypt password.")
+    else:
+        print("Failed to find hidden folder.")
