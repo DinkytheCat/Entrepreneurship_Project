@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Generator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body style="background-color:lightsteelblue;">
+    
+    <h1>Never Forget:</h1>
+    <h3>A new type of password manager</h3>
+    <div>
+        <label for="word1">Word 1:</label>
+        <input type="text" id="word1">
+        <button type='button'value='randwrd'>Random Word</button>
+    </div>
+    <br>
+    <div>
+        <label for="word2">Word 2:</label>
+        <input type="text" id="word2">
+        <button type='button'value='randwrd'>Random Word</button>
+    </div>
+   <br>
+    <button onclick="generatePassword()">Generate Password</button>
+     <button type="reset" value="clr">Clear All</button>
+    <div id="password"></div>
+    
+
+    <script src="script.js"></script>
+</body>
+</html>
