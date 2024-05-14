@@ -1,0 +1,62 @@
+import random
+import string
+from cryptography.hazmat.primitives import padding
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+from cryptography.hazmat.backends import default_backend
+import os
+
+def encrypt_password_and_save(password, key, file_path):
+    try:
+        iv = os.urandom(16)
+        
+        #AES cipher in CBC mode
+        cipher = Cipher(algorithms.AES(key), modes.CBC(iv), backend=default_backend())
+        encryptor = cipher.encryptor()
+        
+        # Padding
+        padder = padding.PKCS7(128).padder()
+        padded_data = padder.update(password) + padder.finalize()
+        
+        # Encrypt
+        encrypted_password = encryptor.update(padded_data) + encryptor.finalize()
+        
+        # Concatenate IV and encrypted password
+        encrypted_data = iv + encrypted_password
+        
+        #add the encrypted password into the file
+        with open(file_path, "wb") as key_file:
+            key_file.write(encrypted_data)
+        
+        print("Encryption complete.")
+        return True
+    except Exception as e:
+        print("Encryption error:", e)
+        return False
+
+
+
+def save_password_to_hidden_folder(folder_path, filename, password, key):
+    try:
+        #Save to the file
+        success = encrypt_password_and_save(password.encode(), key, os.path.join(folder_path, filename))
+        if success:
+            print("Password saved to hidden folder successfully.")
+        else:
+            print("Failed to save password to hidden folder.")
+    except Exception as e:
+        print("Error saving password to hidden folder:", e)
+
+if __name__ == "__main__":
+    user_home = os.path.expanduser("~")
+    folder_relative_path = "Youwillneverfindthis"
+    folder_path = os.path.join(user_home, folder_relative_path)
+    filename = "password.txt"
+    password = "HelloKitty"
+    key = os.urandom(32)
+
+    #just in case the folder doesnt exist
+    if not os.path.exists(folder_path):
+        os.mkdir(folder_path)
+
+    # Save the password
+    save_password_to_hidden_folder(folder_path, filename, password, key)
